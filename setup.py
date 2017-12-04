@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 #
-# wxcast: A Python API and cli to create hdr images.
+# hdr: A Python API and CLI to create hdr images.
 #
 # Copyright (C) 2017 Sean Marlow
 #

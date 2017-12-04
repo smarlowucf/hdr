@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# hdr: A Python API and CLI for HDR images.
+# hdr: A Python API and CLI for creating HDR images.
 #
 # Copyright (C) 2017 Sean Marlow
 #
@@ -17,6 +17,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+from hdr.exceptions import HdrException
 
-__author__ = """Sean Marlow"""
-__version__ = '0.0.1'
+
+def create_hdr(images):
+    """
+    Create an HDR image from the supplied images.
+
+    :param images: List of images to process.
+    :return: Returns name of new HDR image.
+    """
+    pass
