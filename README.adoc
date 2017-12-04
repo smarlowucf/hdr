@@ -1,0 +1,36 @@
+# hdr
+
+A CLI utility for creating HDR images.
+
+image:https://travis-ci.org/smarlowucf/hdr.svg?branch=master["Build Status", link="https://travis-ci.org/smarlowucf/hdr"]
+
+== overview
+
+== Installation
+
+----
+pip install hdr
+----
+
+== Requirements
+
+== Test Requirements
+
+== Usage
+
+== Issues/Enhancements
+
+Please submit issues and requests to
+link:https://github.com/smarlowucf/hdr/issues[Github].
+
+== Contributing
+
+Contributions to *hdr* are welcome and encouraged.
+See link:CONTRIBUTING.adoc[CONTRIBUTING] for info on getting started.
+
+== License
+
+Copyright (c) 2017 Sean Marlow.
+
+Distributed under the terms of GPL-3.0+ license, see
+link:LICENSE[LICENSE] for details.

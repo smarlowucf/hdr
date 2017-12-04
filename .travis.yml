@@ -1,0 +1,17 @@
+language: python
+python:
+  - "3.6"
+
+install:
+  - pip install --upgrade pip
+  - pip install .[test]
+
+script:
+  - pytest --cov=hdr
+  - flake8 tests/
+  - flake8 hdr/
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
