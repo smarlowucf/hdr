@@ -27,6 +27,9 @@ with open('CHANGES.adoc') as changes_file:
     changes = changes_file.read()
 
 requirements = [
+    'Click',
+    'opencv-contrib-python',
+    'Pillow'
 ]
 
 test_requirements = [
@@ -34,7 +37,7 @@ test_requirements = [
 
 setup(
     name='hdr',
-    version='1.1.0',
+    version='0.0.1',
     description='A CLI utility for craeting hdr images.',
     long_description=readme + '\n\n' + changes,
     author="Sean Marlow",

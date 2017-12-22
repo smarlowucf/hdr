@@ -65,7 +65,7 @@ def main():
     help='Remove ANSI color and styling from output.'
 )
 @click.argument('images', nargs=-1)
-def create(no_color, images):
+def drago(no_color, images):
     """
     Create HDR image from a set of images.
 
@@ -76,11 +76,89 @@ def create(no_color, images):
     :param no_color: If True do not style string output.
     """
     try:
-        response = api.create_hdr(images)
+        response = api.drago_hdr(images)
     except Exception as e:
         utils.echo_style(str(e), no_color, fg='red')
     else:
         utils.echo_style(response, no_color)
 
 
-main.add_command(create)
+@click.command()
+@click.option(
+    '--no-color',
+    is_flag=True,
+    help='Remove ANSI color and styling from output.'
+)
+@click.argument('images', nargs=-1)
+def durand(no_color, images):
+    """
+    Create HDR image from a set of images.
+
+    Examples:
+        hdr create image1.jpg image2.jpg image3.jpg
+
+    :param images: List of images to merge into HDR.
+    :param no_color: If True do not style string output.
+    """
+    try:
+        response = api.durand_hdr(images)
+    except Exception as e:
+        utils.echo_style(str(e), no_color, fg='red')
+    else:
+        utils.echo_style(response, no_color)
+
+
+@click.command()
+@click.option(
+    '--no-color',
+    is_flag=True,
+    help='Remove ANSI color and styling from output.'
+)
+@click.argument('images', nargs=-1)
+def reinhard(no_color, images):
+    """
+    Create HDR image from a set of images.
+
+    Examples:
+        hdr create image1.jpg image2.jpg image3.jpg
+
+    :param images: List of images to merge into HDR.
+    :param no_color: If True do not style string output.
+    """
+    try:
+        response = api.reinhard_hdr(images)
+    except Exception as e:
+        utils.echo_style(str(e), no_color, fg='red')
+    else:
+        utils.echo_style(response, no_color)
+
+
+@click.command()
+@click.option(
+    '--no-color',
+    is_flag=True,
+    help='Remove ANSI color and styling from output.'
+)
+@click.argument('images', nargs=-1)
+def mantiuk(no_color, images):
+    """
+    Create HDR image from a set of images.
+
+    Examples:
+        hdr create image1.jpg image2.jpg image3.jpg
+
+    :param images: List of images to merge into HDR.
+    :param no_color: If True do not style string output.
+    """
+    try:
+        response = api.mantiuk_hdr(images)
+    except Exception as e:
+        utils.echo_style(str(e), no_color, fg='red')
+    else:
+        utils.echo_style(response, no_color)
+
+
+main.add_command(drago)
+main.add_command(durand)
+main.add_command(reinhard)
+main.add_command(mantiuk)
