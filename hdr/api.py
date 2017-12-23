@@ -35,7 +35,8 @@ def drago_hdr(image_names,
               exposures=None,
               gamma=1.0,
               saturation=1.0,
-              bias=0.85):
+              bias=0.85,
+              output=None):
     """
     Create an HDR image from the supplied images.
 
@@ -46,7 +47,9 @@ def drago_hdr(image_names,
 
     tonemap_drago = cv2.createTonemapDrago(gamma, saturation, bias)
     ldr_drago = tonemap_drago.process(hdr_img)
-    cv2.imwrite("ldr-drago.jpg", ldr_drago * 255)
+
+    img_out = get_image_output(image_names[1], output)
+    cv2.imwrite(img_out, ldr_drago * 255)
 
 
 def durand_hdr(image_names,
@@ -56,7 +59,8 @@ def durand_hdr(image_names,
                contrast=4.0,
                saturation=1.0,
                sigma_space=2.0,
-               sigma_color=2.0):
+               sigma_color=2.0,
+               output=None):
     """
     Create an HDR image from the supplied images.
 
@@ -69,15 +73,18 @@ def durand_hdr(image_names,
         gamma, contrast, saturation, sigma_space, sigma_color
     )
     ldr_durand = tonemap_durand.process(hdr_img)
-    cv2.imwrite("ldr-durand.jpg", ldr_durand * 255)
+
+    img_out = get_image_output(image_names[1], output)
+    cv2.imwrite(img_out, ldr_durand * 255)
 
 
 def mantiuk_hdr(image_names,
                 algo='debevec',
                 exposures=None,
-                gamma=1.0,
+                gamma=2.2,
                 scale=0.7,
-                saturation=1.0):
+                saturation=1.0,
+                output=None):
     """
     Create an HDR image from the supplied images.
 
@@ -88,14 +95,17 @@ def mantiuk_hdr(image_names,
 
     tonemap_mantiuk = cv2.createTonemapMantiuk(gamma, scale, saturation)
     ldr_mantiuk = tonemap_mantiuk.process(hdr_img)
-    cv2.imwrite("ldr-mantiuk.jpg", ldr_mantiuk * 255)
+
+    img_out = get_image_output(image_names[1], output)
+    cv2.imwrite(img_out, ldr_mantiuk * 255)
 
 
 def mertens_hdr(image_names,
                 contrast=1.0,
                 exposure=0.0,
                 gamma=2.2,
-                saturation=1.0):
+                saturation=1.0,
+                output=None):
     """
     Create an HDR image from the supplied images.
 
@@ -108,7 +118,9 @@ def mertens_hdr(image_names,
 
     tonemap = cv2.createTonemap(gamma)
     ldr_mertens = tonemap.process(mertens_img)
-    cv2.imwrite("ldr-mertens.jpg", ldr_mertens * 255)
+
+    img_out = get_image_output(image_names[1], output)
+    cv2.imwrite(img_out, ldr_mertens * 255)
 
 
 def reinhard_hdr(image_names,
@@ -117,7 +129,8 @@ def reinhard_hdr(image_names,
                  gamma=1.0,
                  intensity=0.0,
                  light_adapt=1.0,
-                 color_adapt=0.0):
+                 color_adapt=0.0,
+                 output=None):
     """
     Create an HDR image from the supplied images.
 
@@ -130,7 +143,16 @@ def reinhard_hdr(image_names,
         gamma, intensity, light_adapt, color_adapt
     )
     ldr_reinhard = tonemap_reinhard.process(hdr_img)
-    cv2.imwrite("ldr-reinhard.jpg", ldr_reinhard * 255)
+
+    img_out = get_image_output(image_names[1], output)
+    cv2.imwrite(img_out, ldr_reinhard * 255)
+
+
+def get_image_output(image, output):
+    if output:
+        return output
+    else:
+        return image.replace('.', '_hdr.')
 
 
 def get_exposure(image):
@@ -141,7 +163,10 @@ def get_exposure(image):
 
 def get_exposures(exposures, image_names):
     if exposures:
-        exposures = exposures.split(',')
+        try:
+            exposures = exposures.split(',')
+        except Exception:
+            raise HdrException('Exposures must be a comma separated list.')
     else:
         exposures = [get_exposure(image) for image in image_names]
 
@@ -158,7 +183,7 @@ def process_image(image_names, exposures, algo):
     elif algo == 'robertson':
         hdr_img = process_robertson(images, exposures)
     else:
-        raise HdrException('The {0} algorithm is not supported.')
+        raise HdrException('The {0} algorithm is not supported.'.format(algo))
 
     return hdr_img
 
@@ -175,6 +200,11 @@ def process_debevec(images, exposures):
     )
 
 
+def process_mertens(images, contrast, saturation, exposure):
+    merge_mertens = cv2.createMergeMertens(contrast, saturation, exposure)
+    return merge_mertens.process(images)
+
+
 def process_roberston(images, exposures):
     calibrate_robertson = cv2.createCalibrateRobertson()
     response_robertson = calibrateRobertson.process(images, times=exposures)
@@ -185,11 +215,6 @@ def process_roberston(images, exposures):
         times=exposures,
         response=response_robertson
     )
-
-
-def process_mertens(images, contrast, saturation, exposure):
-    merge_mertens = cv2.createMergeMertens(contrast, saturation, exposure)
-    return merge_mertens.process(images)
 
 
 def read_images(image_names):
